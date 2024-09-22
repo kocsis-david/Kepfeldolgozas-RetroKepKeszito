@@ -3,7 +3,8 @@ import numpy as np
 
 def adjust_brightness_contrast(image, brightness=0, contrast=0):
     """
-    Adjust the brightness and contrast of an image.
+    Adjust the brightness and contrast of an image. The brightness and contrast values are in the range of -255 to 255.
+    The formula used is: image = image * contrast + brightness
     :param image: Input image
     :param brightness: Brightness adjustment value (-255 to 255)
     :param contrast: Contrast adjustment value (-255 to 255)
@@ -37,7 +38,7 @@ def adjust_brightness_contrast(image, brightness=0, contrast=0):
 
 def add_yellow_tint(image, intensity=0.3):
     """
-    Add a yellow tint to the image.
+    Add a yellow tint to the image. The tint is achieved by blending the image with a yellow color.
     :param image: Input image
     :param intensity: Intensity of yellow tint (0 to 1)
     :return: Tinted image
@@ -47,7 +48,7 @@ def add_yellow_tint(image, intensity=0.3):
 
 def apply_bw_effect(image, strength=0.5):
     """
-    Apply a partial black and white effect.
+    Apply a partial black and white effect. The effect is achieved by blending the image with its grayscale version.
     :param image: Input image
     :param strength: Strength of B&W effect (0 to 1)
     :return: Image with B&W effect
@@ -58,7 +59,8 @@ def apply_bw_effect(image, strength=0.5):
 
 def apply_dark_yellow_tone(image):
     """
-    Apply a dark yellow tone to the image.
+    Apply a dark yellow tone to the image. The tone is achieved by blending the image with a dark yellow color. 
+    The formula used is: image = image * 0.5 + dark_yellow * 0.5
     :param image: Input image
     :return: Image with dark yellow tone
     """
@@ -67,7 +69,8 @@ def apply_dark_yellow_tone(image):
 
 def apply_paper_texture(image, texture_path, intensity=0.3):
     """
-    Apply a paper texture to the image.
+    Apply a paper texture to the image. The texture is blended with the image using the input intensity value. 
+    The formula used is: image = image * (1 - intensity) + texture * intensity
     :param image: Input image
     :param texture_path: Path to the paper texture image
     :return: Image with paper texture
@@ -78,7 +81,9 @@ def apply_paper_texture(image, texture_path, intensity=0.3):
 
 def apply_vignette(image, amount=0.5):
     """
-    Apply a vignette effect to the image.
+    Apply a vignette effect to the image. The effect darkens the corners of the image. The strength of the effect is proportional to the input value. 
+    The effect is applied using a Gaussian kernel. 
+    The formula used is: image = image * mask + vignette * (1 - mask)
     :param image: Input image
     :param amount: Strength of vignette effect (0 to 1)
     :return: Image with vignette effect
@@ -95,7 +100,8 @@ def apply_vignette(image, amount=0.5):
 
 def apply_noise(image, intensity=20):
     """
-    Apply noise to the image.
+    Apply noise to the image. The noise is generated using a Gaussian distribution. The intensity of the noise is proportional to the input value. 
+    The noise is added to the image using the formula: image = image + noise * intensity (clipped to 0-255).
     :param image: Input image
     :param intensity: Intensity of noise
     :return: Image with noise
@@ -107,7 +113,7 @@ def apply_noise(image, intensity=20):
 
 def add_white_noise(image, intensity=0.1):
     """
-    Add white dots to the image.
+    Add white dots to the image. The number of dots is proportional to the intensity. The dots are added randomly to the image.
     :param image: Input image
     :param intensity: Intensity of white noise (0 to 1)
     :return: Image with white noise
@@ -122,7 +128,13 @@ def add_white_noise(image, intensity=0.1):
 
 
 def add_age_spots(image, num_spots=20):
-    """Add random age spots with Gaussian blur."""
+    """
+    Add age spots to the image. Age spots are blurred circles of random radius between 5 and 20 pixels.
+    The spots are added to a separate layer and then blended with the original image.
+    :param image: Input image
+    :param num_spots: Number of age spots to add
+    :return: Image with age spots
+    """
     spots = np.zeros(image.shape[:2], dtype=np.uint8)
     for _ in range(num_spots):
         x = np.random.randint(0, image.shape[1])
@@ -135,9 +147,10 @@ def add_age_spots(image, num_spots=20):
 
 def apply_frame(image, frame_path):
     """
-    Apply a frame to the image.
+    Apply a frame to the image. The frame image should have a transparent center. The input image is placed in the center.
+
     :param image: Input image (numpy array in BGR format)
-    :param frame_path: Path to the frame image (PNG with transparency)
+    :param frame_path: Path to the frame image
     :return: Framed image
     """
     # Convert OpenCV image (BGR) to PIL Image (RGB)
